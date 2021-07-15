@@ -126,11 +126,12 @@ const Formulario = ({keyword, keywordPais, consultarAPI, guardarCargando, hiceCo
                         <option value=""> PAIS DE ORIGEN</option>
                         <option value="ar">Argentina </option>
                         <option value="bo">Bolivia</option>
-                        <option value="cu">Cuba</option>
                         <option value="br">Brasil</option>
                         <option value="cl">Chile</option>
+                        <option value="cu">Cuba</option>
+                        <option value="mx">México</option>                      
                         <option value="ve">Venezuela</option>
-                        <option value="mx">México</option>
+                        
                     </Select>
                     <Boton
                     type="submit"    

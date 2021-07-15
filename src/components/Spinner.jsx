@@ -2,7 +2,8 @@ import React from 'react';
 import './Spinner.css';
 
 const Spinner = () => {
-    return ( 
+    return (
+        <div className="grid w-1024 h-100"> 
         <div className="sk-cube-grid">
             <div className="sk-cube sk-cube1"></div>
             <div className="sk-cube sk-cube2"></div>
@@ -13,6 +14,7 @@ const Spinner = () => {
             <div className="sk-cube sk-cube7"></div>
             <div className="sk-cube sk-cube8"></div>
             <div className="sk-cube sk-cube9"></div>
+        </div>
         </div>
       );
 }

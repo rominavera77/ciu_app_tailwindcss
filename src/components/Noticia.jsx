@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState , Fragment } from 'react';
 import styled from '@emotion/styled';
+import TapaNoticia from './TapaNoticia';
+import mix_diario from '../imagenes/mix_diario.png';
 
 const Boton = styled.button`
     background-color: #3730A3;
@@ -22,7 +24,7 @@ const Boton = styled.button`
     }
 `;
 
-const Noticia = ({noticia, consulta}) => {
+const Noticia = ({noticia, consulta, cargando}) => {
     
     const [hayUrl, cargarUrl] = useState(false)
     if (!noticia.url === ""){
@@ -31,7 +33,8 @@ const Noticia = ({noticia, consulta}) => {
  
     return (    
         <Fragment>
-            {consulta?(
+            {consulta && !cargando 
+            ?(
             <div className="flex ">
                 <div className="mx-8">
                     <p className="text-right text-grey-600 ">{noticia.publishedAt}</p>
@@ -53,7 +56,20 @@ const Noticia = ({noticia, consulta}) => {
                 <div className="claobject-right-top pl-8 pb-2" >
                     <img src={noticia.urlToImage} alt=""/> 
                 </div>
-            </div> ) : null}
+            </div> ) 
+            : 
+            (
+            cargando 
+                ? null         
+                
+                : (<div>
+                    <TapaNoticia
+                    mix_diario={mix_diario} 
+                />
+                </div>) 
+            
+            )
+            }
         </Fragment>
     );
 }

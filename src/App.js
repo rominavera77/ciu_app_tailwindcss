@@ -58,7 +58,7 @@ const consultarAPI = async ({keyword = 'general', keywordPais= 'ar'}) => {
   return (
     <Fragment>
       <Header/>
-        <div className=" bg-blue-100 w-full">
+        <div className=" bg-blue-100 w-full h-full">
           <div className="flex"> 
           <div>
               <img className="flex flex-none h-full w-36" src={recorte} alt=""/>
@@ -77,9 +77,11 @@ const consultarAPI = async ({keyword = 'general', keywordPais= 'ar'}) => {
             /> 
             {cargando ? <Spinner /> : null}
           </div>
+          
           <Noticia className="flex-wrap"
             noticia = {noticia}
             consulta= {consulta}
+            cargando={cargando}
           />
         </div>           
       </div>
