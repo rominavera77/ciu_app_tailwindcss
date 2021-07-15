@@ -5,66 +5,85 @@ import recorte from './imagenes/recorte.png';
 import diario from './imagenes/diario_en_mano.png';
 import Noticia from './components/Noticia';
 import diariero from './imagenes/diariero.png';
+import Formulario from './components/Formulario';
+import Spinner from './components/Spinner';
 
 //https://newsapi.org/account   API DE NOTICIAS
-//422cb197a5a94109bf08abffc9a28311
+//422cb197a5a94109bf08abffc9a28311    API KEY
 
 function App() {
 
-const [noticia, setNoticia] = useState({});
-const [fullnoticia, setNoticias] = useState({});
-const  noticiaElegida = () => {
-  setNoticia(fullnoticia);
-  console.log(noticia);
-};
+let articuloVisto = JSON.parse(localStorage.getItem("articulo"));
+if (!articuloVisto) {
+  articuloVisto = [];
+}
+//Array guardamos todas los artículos seleccionadas
+const[articulo,cargarArticulo]=useState(articuloVisto);
 
-const consultarAPI = async () => {
+useEffect ( () => {
+let articuloVisto = JSON.parse(localStorage.getItem("articulo"));
+  if (articuloVisto) {
+    localStorage.setItem('articulo', JSON.stringify(articulo))
+  }else{
+    localStorage.setItem('articulo', JSON.stringify([]));
+  }
+}, [articulo]);
+
+const cargarNuevosArticulos = category => {
+  cargarArticulo([...articulo, category]);
+}
+
+const [noticia, setNoticia] = useState([]);
+const [cargando, guardarCargando] = useState(false);
+const [consulta, hiceConsulta] = useState(false);
+let keyword
+let keywordPais
+
+const consultarAPI = async ({keyword = 'general', keywordPais= 'ar'}) => {
+  
+  const apiKey = '422cb197a5a94109bf08abffc9a28311'
+  const apiURL = `https://newsapi.org/v2/top-headlines?country=${keywordPais}&category=${keyword}&apiKey=${apiKey}`
+
   try{
-    const api = await fetch('https://newsapi.org/v2/everything?q=apple&from=2021-06-19&to=2021-06-19&sortBy=popularity&apiKey=422cb197a5a94109bf08abffc9a28311');
-    const noticias = await api.json();
-    //console.log(noticia.articles)
-
-    setNoticias(noticias.articles[0]);
-      
+    const api = await fetch(apiURL);
+    const noticiaApi = await api.json();
+    setNoticia(noticiaApi.articles[0]);
+    console.log(noticiaApi.articles[0])
   }
   catch(error){
     console.log(error);
   }
 };
 
-
-useEffect(() =>{
-  consultarAPI();
-  
-},[]);
-
-
   return (
     <Fragment>
-    <Header 
-          diariero = {diariero}
-    />
-    <div>
-      <div className="grid bg-blue-200 m-auto">
-        <div className="flex"> 
+      <Header/>
+        <div className=" bg-blue-100 w-full">
+          <div className="flex"> 
           <div>
-            <img className="flex inline h-auto w-72" src={recorte} alt=""/>
-          </div> 
-          <div className="mt-4 ml-8">
-            <p className="my-4 text-5xl font-mono font-bold text-black">Bienvenide</p>
-            <button className="px-8 py-4 text-2xl font-semibold bg-white border-4 rounded-lg border-black     hover:bg-red-600 hover:text-white " onClick={noticiaElegida}>              
-              Consulte SU Noticia
-            </button>
-            <Noticia
-              noticia = {noticia}
-            />
-            <div>
-              <img className="block rounded-full py-10" src={diario} alt=""/>
-            </div>
-          </div>           
-        </div>
+              <img className="flex flex-none h-full w-36" src={recorte} alt=""/>
+          </div>  
+          <div className="m-4 p-8">
+            <p className="pl-4 ml-8 my-4 text-5xl font-mono font-bold">Bienvenide</p> 
+          <div className="mt-4">
+              
+            <Formulario
+                  keyword = {keyword}
+                  keywordPais = {keywordPais}
+                  consultarAPI={consultarAPI}
+                  guardarCargando={guardarCargando} 
+                  hiceConsulta={hiceConsulta}
+                  cargarNuevosArticulos={cargarNuevosArticulos}
+            /> 
+            {cargando ? <Spinner /> : null}
+          </div>
+          <Noticia className="flex-wrap"
+            noticia = {noticia}
+            consulta= {consulta}
+          />
+        </div>           
+      </div>
       </div>    
-    </div> 
     </Fragment> 
   );
 }
